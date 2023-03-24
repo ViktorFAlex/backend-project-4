@@ -11,6 +11,9 @@
   },
   "rules": {
     "no-underscore-dangle": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
+    "import/extensions": ["error", "ignorePackages"]
   }
 }
