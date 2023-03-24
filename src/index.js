@@ -8,7 +8,10 @@ const loadPage = (url, dirPath) => {
   const fileName = buildFileName(url);
   const filePath = path.join(dirPath, fileName);
   return axios.get(url).then((response) => {
-    const $ = cheerio.load(response.data, { xmlMode: true, decodeEntities: false });
+    const $ = cheerio.load(response.data, {
+      xmlMode: true,
+      decodeEntities: false,
+    });
     const $imgs = $('img');
     const imgPromises = [];
     const { hostname } = new URL(url);
