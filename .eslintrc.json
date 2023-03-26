@@ -13,6 +13,7 @@
     "no-underscore-dangle": "off",
     "no-console": "off",
     "import/extensions": ["error", "ignorePackages"],
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "no-param-reassign":"off"
   }
 }

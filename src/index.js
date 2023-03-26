@@ -3,22 +3,23 @@ import path from 'path';
 import fs from 'fs/promises';
 import buildFileName from './helpers/buildFileName.js';
 import manipulateDomLinks from './helpers/manipulateDomLinks.js';
+import typeHandlers from './helpers/typeHandlers.js';
 
 const loadPage = (url, dirPath) => {
-  const fileName = buildFileName(url);
-  const filePath = path.join(dirPath, fileName);
+  const fileName = buildFileName(url, '.html');
+  const htmlFilePath = path.join(dirPath, fileName);
   return axios.get(url).then((response) => {
-    const imgFolderName = buildFileName(url, '_files');
-    const imgFolderPath = path.join(dirPath, imgFolderName);
-    const [$, imgPromises] = manipulateDomLinks(response.data, url, imgFolderName, imgFolderPath);
+    const folderName = buildFileName(url, '_files');
+    const folderPath = path.join(dirPath, folderName);
+    const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
 
     return fs
-      .mkdir(imgFolderPath, { recursive: true })
-      .then(() => fs.writeFile(filePath, $.html())
+      .mkdir(folderPath, { recursive: true })
+      .then(() => fs.writeFile(htmlFilePath, $.html())
         .then(() => Promise.all(
-          imgPromises.map(({ imgUrl, imgPath }) =>
-            axios.get(imgUrl, { responseType: 'arraybuffer' })
-              .then(({ data }) => fs.writeFile(imgPath, data))),
+          promises.map(({ fileUrl, filePath, type }) =>
+            axios.get(fileUrl, { responseType: typeHandlers.get(type).responseType })
+              .then(({ data }) => fs.writeFile(filePath, data))),
         )));
   });
 };
