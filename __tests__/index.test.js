@@ -9,7 +9,7 @@ import {
 } from 'fs/promises';
 import os from 'os';
 import loadPage from '../src/index.js';
-import buildFileName from '../src/helpers/buildFileName.js';
+import buildFileName from '../src/fileHandlers/buildFileName.js';
 import routes from '../__fixtures__/routes.js';
 import fileNames from '../__fixtures__/fileNames.js';
 

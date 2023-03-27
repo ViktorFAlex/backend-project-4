@@ -1,26 +1,38 @@
 import axios from 'axios';
+import debug from 'debug';
 import path from 'path';
 import fs from 'fs/promises';
-import buildFileName from './helpers/buildFileName.js';
-import manipulateDomLinks from './helpers/manipulateDomLinks.js';
+import buildFileName from './fileHandlers/buildFileName.js';
+import manipulateDomLinks from './fileHandlers/manipulateDomLinks.js';
 import typeHandlers from './helpers/typeHandlers.js';
+import axiosDebugger from '../debuggers/axiosDebugger.js';
+
+const appLog = debug('page-loader');
 
 const loadPage = (url, dirPath) => {
+  if (process.env.DEBUG === 'axios') {
+    axiosDebugger(axios, debug);
+  }
   const fileName = buildFileName(url, '.html');
   const htmlFilePath = path.join(dirPath, fileName);
   return axios.get(url).then((response) => {
     const folderName = buildFileName(url, '_files');
     const folderPath = path.join(dirPath, folderName);
     const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
-
+    appLog($, promises);
     return fs
       .mkdir(folderPath, { recursive: true })
-      .then(() => fs.writeFile(htmlFilePath, $.html())
-        .then(() => Promise.all(
-          promises.map(({ fileUrl, filePath, type }) =>
-            axios.get(fileUrl, { responseType: typeHandlers.get(type).responseType })
-              .then(({ data }) => fs.writeFile(filePath, data))),
-        )));
+      .then(() => {
+        appLog(`Folder created at ${folderPath}`);
+        return fs.writeFile(htmlFilePath, $.html());
+      })
+      .then(() => Promise.all(
+        promises.map(({ fileUrl, filePath, type }) => {
+          appLog(`Creating file ${filePath} from ${fileUrl}`);
+          return axios.get(fileUrl, { responseType: typeHandlers.get(type).responseType })
+            .then(({ data }) => fs.writeFile(filePath, data));
+        }),
+      ));
   });
 };
 
