@@ -1,6 +1,6 @@
 export default {
   collectCoverageFrom: [
-    '**/*.{js,jsx}',
-    '!**/debuggers/**',
+    '**/*.js',
+    '!**/axiosDebugger.js',
   ],
 };
