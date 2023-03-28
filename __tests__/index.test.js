@@ -10,7 +10,7 @@ import loadPage from '../src/index.js';
 import buildFileName from '../src/fileHandlers/buildFileName.js';
 import routes from '../__fixtures__/routes.js';
 import fileNames from '../__fixtures__/fileNames.js';
-import handleError from '../src/handleError';
+import handleError from '../src/handleError.js';
 import handleFsError from '../src/helpers/handleFsError.js';
 import handleAxiosError from '../src/helpers/handleAxiosError.js';
 
