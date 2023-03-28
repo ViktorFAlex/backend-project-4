@@ -1,5 +1,6 @@
 import axios from 'axios';
 import debug from 'debug';
+import { Spinner } from '@topcli/spinner';
 import path from 'path';
 import fs from 'fs/promises';
 import buildFileName from './fileHandlers/buildFileName.js';
@@ -28,18 +29,22 @@ const loadPage = (url, dirPath) => {
           appLog(`Folder created at ${folderPath}`);
           return fs.writeFile(htmlFilePath, $.html());
         })
-        .then(() =>
-          Promise.all(
-            promises.map(({ fileUrl, filePath, type }) => {
-              appLog(`Creating file ${filePath} from ${fileUrl}`);
-              return axios
-                .get(fileUrl, { responseType: typeHandlers.get(type).responseType })
-                .then(({ data }) => fs.writeFile(filePath, data))
-                .catch((error) => {
-                  throw (error);
-                });
-            }),
-          ))
+        .then(() => {
+          const spinners = promises.map(({ fileUrl, filePath, type }) => {
+            const spinner = new Spinner().start(`${fileUrl}`);
+            appLog(`Creating file ${filePath} from ${fileUrl}`);
+            return axios
+              .get(fileUrl, { responseType: typeHandlers.get(type).responseType })
+              .then(({ data }) => fs.writeFile(filePath, data))
+              .catch((error) => {
+                throw (error);
+              })
+              .finally(() => spinner.succeed(
+                `${fileUrl} done in ${parseInt(spinner.elapsedTime) / 1000} sec`,
+              ));
+          });
+          return Promise.all(spinners);
+        })
         .catch((error) => {
           throw (error);
         });
