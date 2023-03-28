@@ -1,5 +1,5 @@
 import {
-  test, expect, beforeEach, describe, it,
+  test, expect, beforeEach, describe, it, jest,
 } from '@jest/globals';
 import nock from 'nock';
 import path from 'path';
@@ -10,6 +10,9 @@ import loadPage from '../src/index.js';
 import buildFileName from '../src/fileHandlers/buildFileName.js';
 import routes from '../__fixtures__/routes.js';
 import fileNames from '../__fixtures__/fileNames.js';
+import handleError from '../src/handleError';
+import handleFsError from '../src/helpers/handleFsError.js';
+import handleAxiosError from '../src/helpers/handleAxiosError.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,5 +73,41 @@ describe('loadPageContent', () => {
 describe('buildRoutePaths', () => {
   test.each(fileNames)('generateFileNames', ({ before, ext, after }) => {
     expect(after).toBe(buildFileName(before, ext));
+  });
+});
+
+describe('check error handlers', () => {
+  it('check fs error', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const newError = new Error('Error');
+    newError.code = 'EACCES';
+    handleFsError(newError);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledWith('There was an Error: permission denied');
+    consoleSpy.mockRestore();
+  });
+
+  it('check axios error', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const newError = new Error('Error');
+    handleAxiosError(newError);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledWith('Server responded with error 404: Not Found!');
+    consoleSpy.mockRestore();
+  });
+
+  it('check global function for errors', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const newAxiosError = new Error('Error');
+    const newFsError = new Error('Error');
+    newAxiosError.isAxiosError = true;
+    newFsError.code = 'EACCES';
+    handleError(newAxiosError);
+    expect(consoleSpy).toHaveBeenCalledTimes(1);
+    expect(consoleSpy).toHaveBeenCalledWith('Server responded with error 404: Not Found!');
+    handleError(newFsError);
+    expect(consoleSpy).toHaveBeenCalledTimes(2);
+    expect(consoleSpy).toHaveBeenCalledWith('There was an Error: permission denied');
+    consoleSpy.mockRestore();
   });
 });

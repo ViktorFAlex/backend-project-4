@@ -9,5 +9,4 @@ export default (error) => {
   } else {
     console.error(getErrorMessage(404));
   }
-  process.exit();
 };
