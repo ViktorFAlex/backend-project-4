@@ -93,6 +93,11 @@ describe('check error handlers', () => {
     handleAxiosError(newError);
     expect(consoleSpy).toHaveBeenCalledTimes(1);
     expect(consoleSpy).toHaveBeenCalledWith('Server responded with error 404: Not Found!');
+    const response = { status: 404 };
+    newError.response = response;
+    handleAxiosError(newError);
+    expect(consoleSpy).toHaveBeenCalledTimes(2);
+    expect(consoleSpy).toHaveBeenCalledWith('Server responded with error 404: Not Found!');
     consoleSpy.mockRestore();
   });
 
