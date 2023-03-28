@@ -4,9 +4,7 @@ import {
 import nock from 'nock';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import {
-  mkdtemp, access, readFile,
-} from 'fs/promises';
+import fs from 'fs/promises';
 import os from 'os';
 import loadPage from '../src/index.js';
 import buildFileName from '../src/fileHandlers/buildFileName.js';
@@ -17,25 +15,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFixtureFile = (filename, encoding = 'utf-8') =>
-  readFile(getFixturePath(filename), encoding);
-
-let tmpDirPath;
-
-beforeEach(async () => {
-  tmpDirPath = await mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
-});
+  fs.readFile(getFixturePath(filename), encoding);
 
 describe('loadPageContent', () => {
-  it('preparingWorkingDirectory', async () => {
-    const {
-      url, result, assets,
-    } = routes;
+  let tmpDirPath;
+  const { url, result, assets } = routes;
+  let expectedFilesData;
 
+  beforeEach(async () => {
+    tmpDirPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
     const promises = assets.map(({
       fixture, assetUrl, encoding, resultUrl,
     }) =>
       readFixtureFile(fixture, encoding).then((data) => {
-        nock(url).get((uri) => uri.includes(assetUrl)).reply(200, data);
+        nock(url)
+          .get((uri) => uri.includes(assetUrl))
+          .reply(200, data);
         return {
           before: data,
           after: null,
@@ -43,19 +38,32 @@ describe('loadPageContent', () => {
           assetUrl,
         };
       }));
-    const expectedFilesData = await Promise.all(promises);
 
+    expectedFilesData = await Promise.all(promises);
+  });
+
+  it('test expected function result', async () => {
     await loadPage(url, tmpDirPath);
     const expectedHtml = await readFixtureFile(result, 'utf-8');
     const rootHtmlData = expectedFilesData.find(({ assetUrl }) => assetUrl === '/');
-    const loadedHtml = await readFile(
+    const loadedHtml = await fs.readFile(
       path.join(tmpDirPath, rootHtmlData.resultUrl),
       'utf-8',
     );
+
     expect(expectedHtml).toEqual(loadedHtml);
     expectedFilesData.forEach(async ({ resultUrl }) => {
-      await expect(access(path.join(tmpDirPath, resultUrl))).resolves.not.toThrow();
+      await expect(fs.access(path.join(tmpDirPath, resultUrl))).resolves.not.toThrow();
     });
+  });
+
+  it('test function rejects with fsError', async () => {
+    await fs.chmod(tmpDirPath, 0);
+    await expect(loadPage(url, tmpDirPath)).rejects.toThrow();
+  });
+
+  it('test function rejects with axios error', async () => {
+    await expect(loadPage('non-existant url', tmpDirPath)).rejects.toThrow();
   });
 });
 

@@ -15,25 +15,38 @@ const loadPage = (url, dirPath) => {
   }
   const fileName = buildFileName(url, '.html');
   const htmlFilePath = path.join(dirPath, fileName);
-  return axios.get(url).then((response) => {
-    const folderName = buildFileName(url, '_files');
-    const folderPath = path.join(dirPath, folderName);
-    const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
-    appLog($, promises);
-    return fs
-      .mkdir(folderPath, { recursive: true })
-      .then(() => {
-        appLog(`Folder created at ${folderPath}`);
-        return fs.writeFile(htmlFilePath, $.html());
-      })
-      .then(() => Promise.all(
-        promises.map(({ fileUrl, filePath, type }) => {
-          appLog(`Creating file ${filePath} from ${fileUrl}`);
-          return axios.get(fileUrl, { responseType: typeHandlers.get(type).responseType })
-            .then(({ data }) => fs.writeFile(filePath, data));
-        }),
-      ));
-  });
+  return axios
+    .get(url)
+    .then((response) => {
+      const folderName = buildFileName(url, '_files');
+      const folderPath = path.join(dirPath, folderName);
+      const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
+      appLog($, promises);
+      return fs
+        .mkdir(folderPath, { recursive: true })
+        .then(() => {
+          appLog(`Folder created at ${folderPath}`);
+          return fs.writeFile(htmlFilePath, $.html());
+        })
+        .then(() =>
+          Promise.all(
+            promises.map(({ fileUrl, filePath, type }) => {
+              appLog(`Creating file ${filePath} from ${fileUrl}`);
+              return axios
+                .get(fileUrl, { responseType: typeHandlers.get(type).responseType })
+                .then(({ data }) => fs.writeFile(filePath, data))
+                .catch((error) => {
+                  throw (error);
+                });
+            }),
+          ))
+        .catch((error) => {
+          throw (error);
+        });
+    })
+    .catch((error) => {
+      throw (error);
+    });
 };
 
 export default loadPage;
