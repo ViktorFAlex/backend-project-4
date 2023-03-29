@@ -11,8 +11,8 @@ export default (nodes, url, type, folderName, folderPath) => {
     .toArray()
     .filter(({ attribs }) => regex.test(attribs[routeType]))
     .forEach(({ attribs }) => {
+      attribs[routeType] = attribs[routeType].replace(url, '');
       const { dir, name, ext } = path.parse(attribs[routeType]);
-
       const fileName = buildFileName(path.join(hostname, dir, name), ext || '.html');
       const newSrc = path.join(folderName, fileName);
 
