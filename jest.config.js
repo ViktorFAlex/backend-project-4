@@ -3,5 +3,6 @@ export default {
     '**/*.js',
     '!**/axiosDebugger.js',
     '!**/bin/*.js',
+    '!**/jest.config.js',
   ],
 };

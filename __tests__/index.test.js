@@ -53,7 +53,6 @@ describe('loadPageContent', () => {
       path.join(tmpDirPath, rootHtmlData.resultUrl),
       'utf-8',
     );
-
     expect(expectedHtml).toEqual(loadedHtml);
     expectedFilesData.forEach(async ({ resultUrl }) => {
       await expect(fs.access(path.join(tmpDirPath, resultUrl))).resolves.not.toThrow();
