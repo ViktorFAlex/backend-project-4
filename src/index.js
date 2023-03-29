@@ -27,7 +27,7 @@ const loadPage = (url, dirPath) => {
         .mkdir(folderPath, { recursive: true })
         .then(() => {
           appLog(`Folder created at ${folderPath}`);
-          return fs.writeFile(htmlFilePath, $.html());
+          return fs.writeFile(htmlFilePath, $.xml());
         })
         .then(() => {
           const spinners = promises.map(({ fileUrl, filePath, type }) => {
