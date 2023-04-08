@@ -5,7 +5,7 @@ import buildFileName from './buildFileName.js';
 export default (nodes, url, type, folderName, folderPath) => {
   const { hostname } = new URL(url);
   const imgPromises = [];
-  const regex = new RegExp(`${url}|^/`);
+  const regex = new RegExp(`${hostname}|^/`);
   const { routeType } = typeHandlers.get(type);
   nodes
     .toArray()

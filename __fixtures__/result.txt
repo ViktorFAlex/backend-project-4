@@ -9,6 +9,7 @@
         <h3>
             <a href="/professions/nodejs">Node.js-программист</a>
         </h3>
+        <script src="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-script.js"></script>
+        <script src="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-script2.js"></script>
     
-    <script src="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-script.js"></script>
 </body></html>

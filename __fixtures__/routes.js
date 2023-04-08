@@ -37,6 +37,12 @@ const routes = {
       resultUrl: path.join(expectedAssetsFolderName, 'page-loader-hexlet-repl-co-script.js'),
     },
     {
+      fixture: 'page-loader-hexlet-repl-co-script.txt',
+      assetUrl: '/script2.js',
+      encoding: 'utf-8',
+      resultUrl: path.join(expectedAssetsFolderName, 'page-loader-hexlet-repl-co-script.js'),
+    },
+    {
       fixture: 'page-loader-hexlet-repl-co-courses.txt',
       assetUrl: '/courses',
       encoding: 'utf-8',
