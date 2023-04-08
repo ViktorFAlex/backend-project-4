@@ -17,8 +17,8 @@ import handleAxiosError from '../src/helpers/handleAxiosError.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
-const readFixtureFile = (filename, encoding = 'utf-8') =>
-  fs.readFile(getFixturePath(filename), encoding);
+const readFixtureFile = (filename, encoding = 'utf-8') => fs
+  .readFile(getFixturePath(filename), encoding);
 
 describe('loadPageContent', () => {
   let tmpDirPath;
@@ -29,8 +29,8 @@ describe('loadPageContent', () => {
     tmpDirPath = await fs.mkdtemp(path.join(os.tmpdir(), 'page-loader-'));
     const promises = assets.map(({
       fixture, assetUrl, encoding, resultUrl,
-    }) =>
-      readFixtureFile(fixture, encoding).then((data) => {
+    }) => readFixtureFile(fixture, encoding)
+      .then((data) => {
         nock(url)
           .get((uri) => uri.includes(assetUrl))
           .reply(200, data);

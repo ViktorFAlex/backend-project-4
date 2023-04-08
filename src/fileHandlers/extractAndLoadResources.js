@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
 import path from 'path';
 import typeHandlers from '../helpers/typeHandlers.js';
 import buildFileName from './buildFileName.js';
