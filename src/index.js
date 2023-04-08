@@ -16,6 +16,7 @@ const loadPage = (url, dirPath) => {
   }
   const fileName = buildFileName(url, '.html');
   const htmlFilePath = path.join(dirPath, fileName);
+
   return axios
     .get(url)
     .then((response) => {
@@ -23,6 +24,7 @@ const loadPage = (url, dirPath) => {
       const folderPath = path.join(dirPath, folderName);
       const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
       appLog($, promises);
+
       return fs
         .mkdir(folderPath, { recursive: true })
         .then(() => {
