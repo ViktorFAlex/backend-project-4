@@ -5,7 +5,6 @@ import path from 'path';
 import fs from 'fs/promises';
 import buildFileName from './fileHandlers/buildFileName.js';
 import manipulateDomLinks from './fileHandlers/manipulateDomLinks.js';
-import typeHandlers from './helpers/typeHandlers.js';
 import axiosDebugger from '../debuggers/axiosDebugger.js';
 
 const appLog = debug('page-loader');
@@ -33,7 +32,7 @@ const loadPage = (url, dirPath) => {
           return fs.writeFile(htmlFilePath, $.html());
         })
         .then(() => {
-          const spinners = promises.map(({ fileUrl, filePath, type }) => {
+          const spinners = promises.map(({ fileUrl, filePath }) => {
             const spinner = new Spinner().start(`${fileUrl}`);
             appLog(`Creating file ${filePath} from ${fileUrl}`);
             return axios
