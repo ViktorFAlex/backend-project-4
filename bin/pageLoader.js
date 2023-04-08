@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import path from 'path';
 import loadPage from '../src/index.js';
 import handleError from '../src/handleError.js';
 
@@ -12,8 +11,7 @@ program
   .option('-o, --output [dir]', `output dir (default: '${process.cwd()}')`)
   .argument('<url>')
   .action((url) => {
-    const outputDir = path.join(process.cwd(), program.opts().output || '');
-    loadPage(url, outputDir)
+    loadPage(url, program.opts().output)
       .then(() => console.log('Done!'))
       .catch((e) => {
         handleError(e);

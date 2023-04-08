@@ -9,10 +9,11 @@ import axiosDebugger from '../debuggers/axiosDebugger.js';
 
 const appLog = debug('page-loader');
 
-const loadPage = (url, dirPath = '') => {
+const loadPage = (url, dirPath = process.cwd()) => {
   if (process.env.DEBUG === 'axios') {
     axiosDebugger(axios, debug);
   }
+
   const fileName = buildFileName(url, '.html');
   const htmlFilePath = path.join(dirPath, fileName);
 
