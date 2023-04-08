@@ -26,9 +26,10 @@ const loadPage = (url, dirPath = '') => {
       appLog($, promises);
 
       return fs
-        .mkdir(folderPath, { recursive: true })
+        .mkdir(folderPath)
         .then(() => {
           appLog(`Folder created at ${folderPath}`);
+
           return fs.writeFile(htmlFilePath, $.html());
         })
         .then(() => {
