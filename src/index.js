@@ -44,7 +44,7 @@ const loadPage = (url, dirPath = process.cwd()) => {
                 throw (error);
               })
               .finally(() => spinner.succeed(
-                `${fileUrl} done in ${parseInt(spinner.elapsedTime) / 1000} sec`,
+                `${fileUrl} done in ${Number(spinner.elapsedTime) / 1000} sec`,
               ));
           });
           return Promise.all(spinners);
