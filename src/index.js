@@ -9,7 +9,7 @@ import axiosDebugger from '../debuggers/axiosDebugger.js';
 
 const appLog = debug('page-loader');
 
-const loadPage = (url, dirPath) => {
+const loadPage = (url, dirPath = '') => {
   if (process.env.DEBUG === 'axios') {
     axiosDebugger(axios, debug);
   }
