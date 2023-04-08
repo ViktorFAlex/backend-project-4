@@ -37,7 +37,7 @@ const loadPage = (url, dirPath) => {
             const spinner = new Spinner().start(`${fileUrl}`);
             appLog(`Creating file ${filePath} from ${fileUrl}`);
             return axios
-              .get(fileUrl, { responseType: typeHandlers.get(type).responseType })
+              .get(fileUrl, { responseType: 'arraybuffer' })
               .then(({ data }) => fs.writeFile(filePath, data))
               .catch((error) => {
                 throw (error);
