@@ -14,7 +14,14 @@ To install type:
 ```bash
 make install
 npm link
-```
+```  
+Usage:  
+```bash  
+  -V, --version   output the current version
+  -h, --help      output help message
+  -o  --output    choose output directory
+```  
+
 #### Launch Guide:
 To start app, type in command line: "page-loader -o <folder to save> <url to scrap>".    
 To get help and commands, type in command line: "page-loader -h".    
