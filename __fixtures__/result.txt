@@ -3,6 +3,7 @@
         <title>Курсы по программированию Хекслет</title>
         <link rel="stylesheet" media="all" href="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-assets-application.css">
         <link href="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-courses.html" rel="canonical">
+        <link href="https://cdn2.page-loader.hexlet.repl.co/assets/menu.css">
     </head>
     <body>
         <img src="page-loader-hexlet-repl-co_files/page-loader-hexlet-repl-co-assets-professions-nodejs.png" alt="Иконка профессии Node.js-программист">

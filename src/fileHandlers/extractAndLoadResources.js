@@ -3,9 +3,9 @@ import typeHandlers from '../helpers/typeHandlers.js';
 import buildFileName from './buildFileName.js';
 
 export default (nodes, url, type, folderName, folderPath) => {
-  const { hostname } = new URL(url);
+  const { origin } = new URL(url);
   const imgPromises = [];
-  const regex = new RegExp(`${hostname}|^/`);
+  const regex = new RegExp(`${origin}|^/`);
   const { routeType } = typeHandlers.get(type);
   nodes
     .toArray()
@@ -13,12 +13,11 @@ export default (nodes, url, type, folderName, folderPath) => {
     .forEach(({ attribs }) => {
       attribs[routeType] = attribs[routeType].replace(url, '');
       const { dir, name, ext } = path.parse(attribs[routeType]);
-      const fileName = buildFileName(path.join(hostname, dir, name), ext || '.html');
+      const fileName = buildFileName(path.join(origin, dir, name), ext || '.html');
       const newSrc = path.join(folderName, fileName);
 
       const fileUrl = new URL(attribs[routeType], url);
       const filePath = path.join(folderPath, fileName);
-
       imgPromises.push({ fileUrl, filePath, type });
       attribs[routeType] = newSrc;
     });

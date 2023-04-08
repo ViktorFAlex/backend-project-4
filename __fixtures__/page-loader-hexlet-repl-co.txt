@@ -5,6 +5,7 @@
         <title>Курсы по программированию Хекслет</title>
         <link rel="stylesheet" media="all" href="/assets/application.css">
         <link href="/courses" rel="canonical">
+        <link href="https://cdn2.page-loader.hexlet.repl.co/assets/menu.css">
     </head>
     <body>
         <img src="/assets/professions/nodejs.png" alt="Иконка профессии Node.js-программист" />
