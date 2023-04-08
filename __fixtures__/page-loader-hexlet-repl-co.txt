@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Курсы по программированию Хекслет</title>
         <link rel="stylesheet" media="all" href="/assets/application.css">
-        <link href="/courses" rel="canonical">
+        <link href="https://page-loader.hexlet.repl.co/courses" rel="canonical">
         <link href="https://cdn2.page-loader.hexlet.repl.co/assets/menu.css">
     </head>
     <body>
@@ -12,7 +12,7 @@
         <h3>
             <a href="/professions/nodejs">Node.js-программист</a>
         </h3>
-        <script src="/script.js"></script>
+        <script src="https://page-loader.hexlet.repl.co/script.js"></script>
         <script src="/script2.js"></script>
     </body>
 </html>

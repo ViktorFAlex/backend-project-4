@@ -20,7 +20,8 @@ const loadPage = (url, dirPath) => {
   return axios
     .get(url)
     .then((response) => {
-      const folderName = buildFileName(url, '_files');
+      const { origin } = new URL(url);
+      const folderName = buildFileName(origin, '_files');
       const folderPath = path.join(dirPath, folderName);
       const [$, promises] = manipulateDomLinks(response.data, url, folderName, folderPath);
       appLog($, promises);
