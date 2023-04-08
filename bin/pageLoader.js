@@ -13,12 +13,12 @@ program
   .argument('<url>')
   .action((url) => {
     const outputDir = path.join(process.cwd(), program.opts().output || '');
-    try {
-      loadPage(url, outputDir).then(() => console.log('Done!'));
-    } catch (e) {
-      handleError(e);
-      process.exit();
-    }
+    loadPage(url, outputDir)
+      .then(() => console.log('Done!'))
+      .catch((e) => {
+        handleError(e);
+        process.exit(1);
+      });
   });
 
 program.parse();
