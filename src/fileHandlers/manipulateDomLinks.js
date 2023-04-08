@@ -2,7 +2,7 @@ import * as cheerio from 'cheerio';
 import extractAndLoadResources from './extractAndLoadResources.js';
 
 export default (html, url, folderName, folderPath) => {
-  const $ = cheerio.load(html, { decodeEntities: false });
+  const $ = cheerio.load(html, { decodeEntities: false, selfClosingTags: false });
 
   const $imgs = $('img');
   const $links = $('link');
